@@ -84,4 +84,4 @@ const bothPromises = async (msg) => {
   }
 }
 
-bothPromises('Google');
+bothPromises('fb');
