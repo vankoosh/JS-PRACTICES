@@ -1,22 +1,22 @@
-const firstPromise = (location) => {
-  return new Promise((resolve, reject) => {
-    if (location == "Google") {
-      console.log(`Making request to ${location}. Please wait...`);
-      resolve(`My location is ${location}`);
-    } else {
-      reject("My location is not known");
-    }
-  });
-};
+// const firstPromise = (location) => {
+//   return new Promise((resolve, reject) => {
+//     if (location == "Google") {
+//       console.log(`Making request to ${location}. Please wait...`);
+//       resolve(`My location is ${location}`);
+//     } else {
+//       reject("My location is not known");
+//     }
+//   });
+// };
 
-const secondPromise = (firstResolved) => {
-  return new Promise((resolve, reject) => {
-    console.log("Processing location response");
-    resolve(`Location response resolved with ${firstResolved}`);
-  });
-};
+// const secondPromise = (firstResolved) => {
+//   return new Promise((resolve, reject) => {
+//     console.log("Processing location response");
+//     resolve(`Location response resolved with ${firstResolved}`);
+//   });
+// };
 
-// firstPromise("Google")
+// // firstPromise("Google")
 //   .then((response) => {
 //     console.log(`Response received as: ${response}`);
 //     return secondPromise(response); // IN ORDER TO CHAIN PROMISES, YOU HAVE TO return THE SECOND PROMISE AND PASS IN
@@ -43,23 +43,23 @@ const secondPromise = (firstResolved) => {
 // doThis('Facebook');
 
 
-const promiseOne = location => {
-  return new Promise((resolve, reject) => {
-    if (location === 'Google') {
-      console.log(`Location resolved to ${location}`)
-      resolve(`LOCATION = ${location}`)
-    } else {
-      reject('My location could not be determined');
-    }
-  }
-  )
-}
+// const promiseOne = location => {
+//   return new Promise((resolve, reject) => {
+//     if (location === 'Google') {
+//       console.log(`Location resolved to ${location}`)
+//       resolve(`LOCATION = ${location}`)
+//     } else {
+//       reject('My location could not be determined');
+//     }
+//   }
+//   )
+// }
 
-const promiseTwo = responseFromPromiseOne => {
-  return new Promise((resolve, reject) => {
-    resolve(`The response from promise One is: ${responseFromPromiseOne}`)
-  })
-}
+// const promiseTwo = responseFromPromiseOne => {
+//   return new Promise((resolve, reject) => {
+//     resolve(`The response from promise One is: ${responseFromPromiseOne}`)
+//   })
+// }
 
 // promiseOne('Google')
 //   .then(responseOne => {
@@ -73,36 +73,57 @@ const promiseTwo = responseFromPromiseOne => {
 //         console.log(err)
 //   })
       
-const bothPromises = async (msg) => {
-  try {const responseOne = await promiseOne(msg);
-  console.log('Resolving promise One');
-  console.log(responseOne);
-  const responseTwo = await promiseTwo(responseOne);
-    console.log('Resolving promise Two');
-  } catch(err) {
-     console.log(err)
-  }
-}
+// const bothPromises = async (msg) => {
+//   try {const responseOne = await promiseOne(msg);
+//   console.log('Resolving promise One');
+//   console.log(responseOne);
+//   const responseTwo = await promiseTwo(responseOne);
+//     console.log('Resolving promise Two');
+//   } catch(err) {
+//      console.log(err)
+//   }
+// }
 
-bothPromises('fb');
+// bothPromises('fb');
 
-const promiseThree = () => {
+// const promiseThree = () => {
+//   return new Promise((resolve, reject) => {
+//     setTimeout(() => {
+//       resolve('Resolved promise three')
+//     },1000)
+//   })
+// }
+
+// const noAwait = async () => {
+//   const result = promiseThree();
+//   console.log(result);
+// }
+
+// const withAwait = async () => {
+//   const result = await promiseThree();
+//   console.log(result);
+// }
+
+// noAwait();
+// withAwait();
+
+
+const chooseBeans = () => {
   return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      resolve('Resolveed promise three')
-    },1000)
-  })
+setTimeout(() => {
+  let beans = ["black", "white", "kidney", "spring"];
+  let beansIndex = Math.floor(Math.random() * beans.length);
+  resolve("I am making " + beans[beansIndex] + ' beans.');
+}, 2000)
+    })
 }
 
-const noAwait = () => {
-  const result = promiseThree();
-  console.log(result);
+
+chooseBeans().then(result => { console.log(result) });
+
+const asyncChooseBeans = async () => {
+  const result = await chooseBeans();
+  console.log(result)
 }
 
-const withAwait = async () => {
-  const result = await promiseThree();
-  console.log(result);
-}
-
-noAwait();
-withAwait();
+asyncChooseBeans();
