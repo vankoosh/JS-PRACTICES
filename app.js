@@ -85,3 +85,24 @@ const bothPromises = async (msg) => {
 }
 
 bothPromises('fb');
+
+const promiseThree = () => {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve('Resolveed promise three')
+    },1000)
+  })
+}
+
+const noAwait = () => {
+  const result = promiseThree();
+  console.log(result);
+}
+
+const withAwait = async () => {
+  const result = await promiseThree();
+  console.log(result);
+}
+
+noAwait();
+withAwait();
