@@ -127,3 +127,13 @@ const asyncChooseBeans = async () => {
 }
 
 asyncChooseBeans();
+
+
+const hostDinnerParty = async () => {
+  try {
+    let result = await cookBeanSouffle();
+    console.log(`${result} is served!`)
+  } try (error) {
+
+  }
+  }
