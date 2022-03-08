@@ -160,7 +160,7 @@ const withAwait = async () => {
 const withoutAwait = async () => {
   const firstP = pOne();
   const secondP = pTwo();
-  console.log(firstP,secondP)
+  console.log(await firstP,await secondP)
 }
 
 withAwait();
