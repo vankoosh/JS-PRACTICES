@@ -108,32 +108,60 @@
 // withAwait();
 
 
-const chooseBeans = () => {
+// const chooseBeans = () => {
+//   return new Promise((resolve, reject) => {
+// setTimeout(() => {
+//   let beans = ["black", "white", "kidney", "spring"];
+//   let beansIndex = Math.floor(Math.random() * beans.length);
+//   resolve("I am making " + beans[beansIndex] + ' beans.');
+// }, 2000)
+//     })
+// }
+
+
+// chooseBeans().then(result => { console.log(result) });
+
+// const asyncChooseBeans = async () => {
+//   const result = await chooseBeans();
+//   console.log(result)
+// }
+
+// asyncChooseBeans();
+
+
+// const hostDinnerParty = async () => {
+//   try {
+//     let result = await cookBeanSouffle();
+//     console.log(`${result} is served!`)
+//   } catch (error) {
+//     console.log(error)
+//   }
+//   }
+
+
+const pOne = () => {
   return new Promise((resolve, reject) => {
-setTimeout(() => {
-  let beans = ["black", "white", "kidney", "spring"];
-  let beansIndex = Math.floor(Math.random() * beans.length);
-  resolve("I am making " + beans[beansIndex] + ' beans.');
-}, 2000)
+      resolve('Promise one resolved after 1 second!')
     })
 }
 
-
-chooseBeans().then(result => { console.log(result) });
-
-const asyncChooseBeans = async () => {
-  const result = await chooseBeans();
-  console.log(result)
+const pTwo = () => {
+    return new Promise((resolve, reject) => {
+      resolve('Promise two resolved after 2 seconds!')
+    })
 }
 
-asyncChooseBeans();
+const withAwait = async () => {
+  const firstP = await pOne();
+  const secondP = await pTwo();
+  console.log(await firstP,await secondP)
+}
 
+const withoutAwait = async () => {
+  const firstP = pOne();
+  const secondP = pTwo();
+  console.log(firstP,secondP)
+}
 
-const hostDinnerParty = async () => {
-  try {
-    let result = await cookBeanSouffle();
-    console.log(`${result} is served!`)
-  } try (error) {
-
-  }
-  }
+withAwait();
+withoutAwait();
