@@ -16,7 +16,7 @@
 //   });
 // };
 
-// // firstPromise("Google")
+//  firstPromise("Google")
 //   .then((response) => {
 //     console.log(`Response received as: ${response}`);
 //     return secondPromise(response); // IN ORDER TO CHAIN PROMISES, YOU HAVE TO return THE SECOND PROMISE AND PASS IN
@@ -26,7 +26,7 @@
 //   })
 //    .catch(error => {console.log(error)});
 
-
+//--------------------------------------------------------------------------------ASYNC AWAIT EXCERCISES
 
 // INSTEAD DO async await SYNTAX
 
@@ -107,7 +107,7 @@
 // noAwait();
 // withAwait();
 
-
+//----------------------------------------------------------------------------------
 // const chooseBeans = () => {
 //   return new Promise((resolve, reject) => {
 // setTimeout(() => {
@@ -138,30 +138,32 @@
 //   }
 //   }
 
+//-------------------------------------------------------------
+// const pOne = () => {
+//   return new Promise((resolve, reject) => {
+//       resolve('Promise one resolved after 1 second!')
+//     })
+// }
 
-const pOne = () => {
-  return new Promise((resolve, reject) => {
-      resolve('Promise one resolved after 1 second!')
-    })
-}
+// const pTwo = () => {
+//     return new Promise((resolve, reject) => {
+//       resolve('Promise two resolved after 2 seconds!')
+//     })
+// }
 
-const pTwo = () => {
-    return new Promise((resolve, reject) => {
-      resolve('Promise two resolved after 2 seconds!')
-    })
-}
+// const withAwait = async () => {
+//   const firstP = await pOne();
+//   const secondP = await pTwo();
+//   console.log(await firstP,await secondP)
+// }
 
-const withAwait = async () => {
-  const firstP = await pOne();
-  const secondP = await pTwo();
-  console.log(await firstP,await secondP)
-}
+// const withoutAwait = async () => {
+//   const firstP = pOne();
+//   const secondP = pTwo();
+//   console.log(await firstP,await secondP)
+// }
 
-const withoutAwait = async () => {
-  const firstP = pOne();
-  const secondP = pTwo();
-  console.log(await firstP,await secondP)
-}
+// withAwait();
+// withoutAwait();
 
-withAwait();
-withoutAwait();
+//---------------------------------------------------------XHR REQUESTS
