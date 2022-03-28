@@ -1,3 +1,4 @@
+// ---------------------------------------------------------------------------------------PROMISES
 // const firstPromise = (location) => {
 //   return new Promise((resolve, reject) => {
 //     if (location == "Google") {
@@ -25,6 +26,20 @@
 //     console.log(secondResponse);
 //   })
 //    .catch(error => {console.log(error)});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //--------------------------------------------------------------------------------ASYNC AWAIT EXCERCISES
 
@@ -107,7 +122,7 @@
 // noAwait();
 // withAwait();
 
-//----------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------RANDOM
 // const chooseBeans = () => {
 //   return new Promise((resolve, reject) => {
 // setTimeout(() => {
@@ -167,3 +182,5 @@
 // withoutAwait();
 
 //---------------------------------------------------------XHR REQUESTS
+
+
