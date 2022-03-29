@@ -183,4 +183,26 @@
 
 //---------------------------------------------------------XHR REQUESTS
 
+window.onload = () => {
+  // alert("JS loaded");
+}
 
+const getBtn = document.querySelector("#get-btn");
+
+const getData = () => {
+  const promise = new Promise((resolve,reject) =>{const xhr = new XMLHttpRequest();
+  const url = "https://reqres.in/api/users";
+  xhr.open("GET", url);
+  xhr.send();
+  xhr.responseType = 'json';
+
+  xhr.onload = () => {
+    resolve(xhr.response);
+    console.log(xhr.response);
+    };
+  })
+  
+  
+}
+
+getBtn.addEventListener("click",getData)
