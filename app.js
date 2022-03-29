@@ -188,21 +188,38 @@ window.onload = () => {
 }
 
 const getBtn = document.querySelector("#get-btn");
+const sendBtn = document.querySelector("#send-btn");
 
-const getData = () => {
-  const promise = new Promise((resolve,reject) =>{const xhr = new XMLHttpRequest();
-  const url = "https://reqres.in/api/users";
-  xhr.open("GET", url);
-  xhr.send();
-  xhr.responseType = 'json';
-
-  xhr.onload = () => {
-    resolve(xhr.response);
-    console.log(xhr.response);
+//this will be a generic function for sending requests, GET,POST,...
+const sendRequest = (method, url,data) => {   // .then() will be applied to this function since it returns it upon calling
+  const promise = new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();       //create a new request
+    xhr.open(method, url);                  //open a connection
+    xhr.responseType = "json";              //response type you get back from the API will be a JSON object
+    
+    xhr.onload = () => {                    //add an event listener on the request when it comes back
+      resolve(xhr.response);                //the resolve of the promise will be the response of the request
     };
-  })
-  
-  
+    xhr.send(JSON.stringify(data));         //and send the request with .send() if you are POSTing, you will send the POSTed data, you convert the data into a JSON object by JSON.stringify(data) it
+  });                                       //the data can be a password for login or your email address for a newsletter or...
+  return promise;                           // have to return, otherwise it does nothing
 }
 
-getBtn.addEventListener("click",getData)
+
+//this is the specific function that makes a specific request every time you press the GET button that has a event listener on it
+const getData = () => {
+  sendRequest("GET", "https://reqres.in/api/users").then((response=>{console.log(response)})); //here you attach the .then() method to the function
+}
+
+//this is the specific function that makes a specific request every time you press the POST button that has a event listener on it
+const sendData = () => {
+  sendRequest("POST", "https://reqres.in/api/register", { // this specific webpage API enpoint requires an object with email and password as the third param in the request
+    email: "eve.holt@reqres.in",
+    password: "pistol",
+  }).then((response) => {
+    console.log(response);
+  });
+}
+
+getBtn.addEventListener("click", getData); // no () after function name
+sendBtn.addEventListener("click", sendData);
