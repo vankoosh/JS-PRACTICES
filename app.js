@@ -190,7 +190,7 @@ window.onload = () => {
 const getBtn = document.querySelector("#get-btn");
 const sendBtn = document.querySelector("#send-btn");
 
-//this will be a generic function for sending requests, GET,POST,...
+//this will be a generic reusable function for sending requests, GET,POST,...
 const sendRequest = (method, url,data) => {   // .then() will be applied to this function since it returns it upon calling
   const promise = new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();       //create a new request
@@ -273,4 +273,6 @@ const displayShortUrl = (event) => {
 }
 
 shortenButton.addEventListener('click', displayShortUrl);
+
+
 
