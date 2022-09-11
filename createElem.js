@@ -28,12 +28,12 @@ renderInputButtons(roles, 'role');
 // This function will create a new <section> with radio
 // inputs based on the data provided in the labels array.
 function renderInputButtons(labels, groupName) {
-  const container = document.createElement('section');
-  container.setAttribute('id', `${groupName}Inputs`);
+  const container = document.createElement('section'); //create sectio container element
+  container.setAttribute('id', `${groupName}Inputs`);  // give it id
 
   let header = document.createElement('h3');
-  header.innerText = `Select a ${groupName}`;
-  container.appendChild(header);
+  header.innerText = `Select a ${groupName}`; // insert html
+  container.appendChild(header); // instantiate header
 
   labels.forEach(label => { // For each label...
     // Create the radio input element.
