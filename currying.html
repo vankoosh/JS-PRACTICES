@@ -1,329 +1,406 @@
-<h1>Currying in JavaScript</h1>
-<b>Currying is a functional programming technique.</b>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 
-<p>
-  This article will discuss currying, a functional programming technique we can use to write code that is modular, easy to
-  test, and highly reusable. Functional programming is a declarative paradigm that emphasizes immutability and pure
-  functions — meaning the function is side-effect free and for any given input it will always return the same output.
-
-  This helps make code more readable and easier to reason about in general, and currying is just one part of it. Let’s get
-  started with currying!
-</p>
-
-<h2>How currying works</h2>
-<p>
-  In order to understand the point of currying and how it works, we can first look at a non-curried function.
-  
-  Below, we’ve created a non-curried function <pre>add()</pre>. <pre>add()</pre> will still execute if called with a missing argument, which
-  would result in the missing variable being evaluated as undefined. For the <pre>add()</pre> function below, if <pre>add()</pre> was called
-  with an argument for a but not for b, the function call would evaluate as 1 + undefined and return NaN. That’s not great
-  and could be tricky to debug in practice.
-</p>
-
-<pre>
-  function add(a,b) {
-  return a + b;
+  .container{
+    width: 90vw;
+    margin: 3rem auto 0rem;
+    font-family: 'Roboto', sans-serif;
   }
-</pre>
 
-<p>
-  Why does this happen? If <pre>add()</pre> is missing an argument when it’s called, it will evaluate the function call as add(a,
-  undefined). For example, if we use 1 as an argument for the variable a and no argument for b, calling add(1) would run
-  as add(1, undefined).
-</p>
+  h1{
+    font-weight: bold;
+  }
+</style>
 
-Function call: → Evaluated as:
-add(1) → add(1, undefined)
-
-<p>
-  Let’s curry the <pre>add()</pre> function to see how we can handle the function call better if only one argument is available. What
-  we can do is transform the <pre>add()</pre> function, which normally expects multiple arguments, into a series of nested functions
-  that will each take a single argument.
+<div class="container">
+  <h1>Currying in JavaScript</h1><br>
+  <b>Currying is a functional programming technique.</b>
   
-  This makes the function calls more modular. With curried functions, calling the outer function returns the next function
-  in the chain and so on until the innermost function is called, which then returns a value.
+  <p>
+    This article will discuss currying, a functional programming technique we can use to write code that is modular, easy
+    to
+    test, and highly reusable. Functional programming is a declarative paradigm that emphasizes immutability and pure
+    functions — meaning the function is side-effect free and for any given input it will always return the same output.
   
-  In code that would look like this:
-</p>
-
-// traditional function
-function add(a,b) {
-return a + b;
-}
-
-// curried function
-function curried_add(a) {
-// The outer function returns a nested single-argument function
-return function nested_func(b) {
-return a + b;
-}
-}
-
-<p>
-  What we did in the code is declare <pre>curried_add()</pre> as a function that takes a single argument and returns another function
-  named <pre>nested_func()</pre>. (The returned function can also be anonymous, but has a name in this example for clarity.)
+    This helps make code more readable and easier to reason about in general, and currying is just one part of it. Let&rsquo;s
+    get
+    started with currying!
+  </p>
   
-  Calling the outer function <pre>curried_add()</pre> returns <pre>nested_func()</pre>.
-  Calling nested_func uses the arguments supplied from calling curried_add and nested_func to return the evaluated result
-  of a + b.
-  When you call curried_add(a), the returned output is the function nested_func(b). Then you can call nested_func(b) and
-  the output will be the evaluated result of a + b.
-</p>
-
-Function call: → Returns:
-curried_add(1) → nested_func(b)
-nested_func(b) → a + b
-
-<p>
-  You can call that in your code as curried_add(a)(b), which invokes <pre>curried_add()</pre>, then invokes <pre>nested_func()</pre> immediately
-  following the first function call.
+  <h2>How currying works</h2>
+  <p>
+    In order to understand the point of currying and how it works, we can first look at a non-curried function.
   
-  Let’s break that down further. In the code block below, we are assigning the result of calling <pre>curried_add()</pre> to a
-  variable named add_one.
-</p>
-
-let add_one = curried_add(1);
-// returns <pre>nested_func()</pre>
-
-<p>Now, when we call add_one(), it will return the value of a + b, because it is the function <pre>nested_func()</pre>.</p>
-
-add_one(10);
-// returns 11
-
-<p>
-  The argument from calling <pre>curried_add()</pre> is available to the nested functions due to closure. A closure means that the
-  nested function retains the scope of parent functions based on where the function is defined, even if the nested
-  function is executed outside of that lexical scope.
+    Below, we&rsquo;ve created a non-curried function <i>add()</i>. <i>add()</i> will still execute if called with a missing
+    argument, which
+    would result in the missing variable being evaluated as undefined. For the <i>add()</i> function below, if
+    <i>add()</i> was called
+    with an argument for a but not for b, the function call would evaluate as 1 + undefined and return NaN. That&rsquo;s not
+    great
+    and could be tricky to debug in practice.
+  </p>
   
-  You may recall that a function can access variables both in its inner and outer scope. That behavior is an example of
-  lexical scoping rules, which means the scoping is based on the structure of the code.
+  <i>
+    <pre>
+      function add(a,b) {
+      return a + b;
+      }
+    </pre>
+  </i>
   
-  Taking that one step further, when a function is invoked, lexical scoping is retained. So nested functions will continue
-  to have access to any variables that are declared in the outer scope of parent functions. This is true even if that
-  parent function is done executing.
+  <p>
+    Why does this happen? If <i>add()</i> is missing an argument when it&rsquo;s called, it will evaluate the function call as
+    add(a,
+    undefined). For example, if we use 1 as an argument for the variable a and no argument for b, calling add(1) would run
+    as add(1, undefined).
+  </p>
   
-  Overall, that means that when you run the line let add_one = curried_add(1); , add_one() will retain the scope from
-  curried_add() and therefore have access to the variable created for the argument a as 1, which you can see explained in
-  the code snippet line by line:
-</p>
-
-function curried_add(a) {
-// has access to the argument for a
-return function nested_add(b) {
-// has access to the arguments for a and b
-return a + b;
-}
-}
-
-// creates a local variable a and assigns it the value 1
-let add_one = curried_add(1);
-
-// add_one() still has access to the argument from curried_add()
-add_one(10);
-
-
--------------------------------
-<pre>Code Challenge</pre>
-<p>
-  Declare a variable named <pre>nestedFunction</pre> and set it equal to <pre>curriedMultiply()</pre> called with a number argument.
+  <pre>
+    Function call: → Evaluated as:
+    add(1) → add(1, undefined)
+  </pre>
   
-  Declare a second variable, <pre>result</pre> and set it equal to <pre>nestedFunction()</pre> called with a number argument.
+  <p>
+    Let&rsquo;s curry the <i>add()</i> function to see how we can handle the function call better if only one argument is
+    available. What
+    we can do is transform the <i>add()</i> function, which normally expects multiple arguments, into a series of nested
+    functions
+    that will each take a single argument.
   
-  If you <pre>console.log() result</pre>, it should log a number.
-</p>
-
-
-function curriedMultiply(a) {
-return function(b) {
-return a * b
-}
-}
-// Write your code here
-const nestedFunction = curriedMultiply(2);
-const result = nestedFunction(4);
-----------------------------------------------
-
--------------------------------------
-<pre>Code Challenge</pre>
-The function <pre>makeGreeting()</pre> takes one string argument.
-
-Write additional code to make <pre>makeGreeting()</pre> return a function.
-
-The returned function should return a concatenation of the first string, a space, and the second string, such as “Hello
-World”.
-
-You can uncomment the lines below the function to check your work.
-
-
-function makeGreeting(string) {
-//Write your code here
-return string2 => {
-return string + ' ' + string2;
-}
-
-}
-let hello = makeGreeting('Hello');
-let helloWorld = hello('World');
-console.log(helloWorld);
-----------------------------------------
-
-<h2>Currying with Arrow Functions</h2>
-<p>The same <pre>curried_add()</pre> function from earlier can be rewritten much more concisely using ES6 arrow function syntax:</p>
-
-let curried_add = a => b => a + b;
-<p>Let’s break that down:</p>
-<ul>
+    This makes the function calls more modular. With curried functions, calling the outer function returns the next
+    function
+    in the chain and so on until the innermost function is called, which then returns a value.
   
-  <li><pre>let curried_add</pre> is a variable assignment to the outer arrow function, a => ....</li>
-  <li>Calling curried_add takes an argument a and returns b => a + b.</li>
-  <li>Invoking the second arrow function returns the sum, or a + b.</li>
-</ul>
-
------------------
-Code Challenge
-<p>Rewrite the function <pre>changeColor()</pre> with arrow expression syntax and assign it to the variable <pre>changeColorArrow</pre>.</p>
-
-function changeColor(color) {
-return function(obj) {
-obj.color = color;
-}
-}
-
-// write your code here
-let changeColorArrow = color => obj => obj.color = color;
------------------
-
-
-<h2>Currying in Context</h2>
-<p>
-  Now that we understand the basics of how currying works, let’s look at a use case that’s more interesting than addition.
+    In code that would look like this:
+  </p>
   
-  For this example, a social sports league company needs a way to filter through an array of players from various cities,
-  sports leagues, and age brackets to generate some graphs about their player data in a dashboard. Each time they generate
-  a list of filtered values, they have to repeat filters that iterate over the entire <pre>players</pre> array, so they want to
-  modify their code.
-</p>
-
-const players = [
-{ age: 5, sport: "soccer", city: "Chicago", dateJoined: new Date('2021-01-20') },
-{ age: 6, sport: "baseball", city: "Boulder", dateJoined: new Date('2019-12-30') },
-{ age: 10, sport: "soccer", city: "Chicago", dateJoined: new Date('2020-11-12') },
-{ age: 11, sport: "handball", city: "San Francisco", dateJoined: new Date('2020-08-21') },
-{ age: 6, sport: "soccer", city: "Chicago", dateJoined: new Date('2021-07-06') },
-{ age: 8, sport: "softball", city: "Boulder", dateJoined: new Date('2019-02-27') },
-{ age: 7, sport: "tennis", city: "San Francisco", dateJoined: new Date('2019-05-31') },
-{ age: 4, sport: "handball", city: "San Francisco", dateJoined: new Date('2018-03-10') }
-]
-
-<p>
-  Let’s say they’re interested in seeing all players from the city of San Francisco sorted by age as well as seeing all
-  players in San Francisco who play handball. We can filter over the array of objects to grab the relevant objects, then
-  sort the results or do additional filtering.
+  <pre>
+    // traditional function
+    function add(a,b) {
+    return a + b;
+    }
+    
+    // curried function
+    function curried_add(a) {
+    // The outer function returns a nested single-argument function
+    return function nested_func(b) {
+    return a + b;
+    }
+    }
+  </pre>
   
-  Below, <pre>sortPlayersByValueFromCity()</pre> takes three arguments:
-</p>
+  <p>
+    What we did in the code is declare <i>curried_add()</i> as a function that takes a single argument and returns another
+    function
+    named <i>nested_func()</i>. (The returned function can also be anonymous, but has a name in this example for clarity.)
+  
+    Calling the outer function <i>curried_add()</i> returns <i>nested_func()</i>.
+    Calling nested_func uses the arguments supplied from calling curried_add and nested_func to return the evaluated
+    result
+    of a + b.
+    When you call <i>curried_add(a)</i>, the returned output is the function <i>nested_func(b)</i>. Then you can call <i>nested_func(b)</i> and
+    the output will be the evaluated result of a + b.
+  </p>
+  
+  <pre>
+    Function call: → Returns:
+    curried_add(1) → nested_func(b)
+    nested_func(b) → a + b
+  </pre>
+  
+  <p>
+    You can call that in your code as <i><b>curried_add(a)(b)</b></i>, which invokes <i>curried_add()</i>, then invokes
+    <i>nested_func()</i> immediately
+    following the first function call.
+  
+    Let&rsquo;s break that down further. In the code block below, we are assigning the result of calling <i>curried_add()</i> to
+    a
+    variable named <i><b>add_one</b></i>.
+  </p>
+  
+  <pre>
+    let add_one = curried_add(1);
+    // returns <i>nested_func()</i>
+  </pre>
+  
+  <p>Now, when we call <i>add_one()</i>, it will return the value of a + b, because it is the function <i>nested_func()</i>.</p>
+  
+  add_one(10);
+  // returns 11
+  
+  <p>
+    The argument from calling <i>curried_add()</i> is available to the nested functions due to closure. A closure means
+    that the
+    nested function retains the scope of parent functions based on where the function is defined, even if the nested
+    function is executed outside of that lexical scope.
+  
+    You may recall that a function can access variables both in its inner and outer scope. That behavior is an example of
+    lexical scoping rules, which means the scoping is based on the structure of the code.
+  
+    Taking that one step further, when a function is invoked, lexical scoping is retained. So nested functions will
+    continue
+    to have access to any variables that are declared in the outer scope of parent functions. This is true even if that
+    parent function is done executing.
+  
+    Overall, that means that when you run the line let add_one = curried_add(1); , <i>add_one()</i> will retain the scope from
+    curried_add() and therefore have access to the variable created for the argument a as 1, which you can see explained
+    in
+    the code snippet line by line:
+  </p>
+  
+  <pre>
+    function curried_add(a) {
+    // has access to the argument for a
+    return function nested_add(b) {
+    // has access to the arguments for a and b
+    return a + b;
+    }
+    }
+    
+    // creates a local variable a and assigns it the value 1
+    let add_one = curried_add(1);
+    
+    // add_one() still has access to the argument from curried_add()
+    add_one(10);
+  </pre>
+  
+  
+  -------------------------------<br>
+  <i>Code Challenge</i>
+  <p>
+    Declare a variable named <i>nestedFunction</i> and set it equal to <i>curriedMultiply()</i> called with a number
+    argument.  
+    Declare a second variable, <i>result</i> and set it equal to <i>nestedFunction()</i> called with a number argument.  
+    If you <i>console.log() result</i>, it should log a number.
+  </p>
+  
+  
+  <pre>
+    function curriedMultiply(a) {
+    return function(b) {
+    return a * b
+     }
+    }
+  </pre>
+  <pre>
+    // Write your code here
+    const nestedFunction = curriedMultiply(2);
+    const result = nestedFunction(4);
+  </pre>
+  ----------------------------------------------
+  
+  -------------------------------------
+  <i>Code Challenge</i><br>
+  The function <i>makeGreeting()</i> takes one string argument.<br>
+  
+  Write additional code to make <i>makeGreeting()</i> return a function.<br>
+  
+  The returned function should return a concatenation of the first string, a space, and the second string, such as “Hello
+  World”.<br>
+  
+  You can uncomment the lines below the function to check your work.
+  
+  
+  <pre>
+    function makeGreeting(string) {
+    //Write your code here
+    return string2 => {
+    return string + ' ' + string2;
+    }
+    
+    }
+  </pre>
 
+  <pre>
+    let hello = makeGreeting('Hello');
+    let helloWorld = hello('World');
+    console.log(helloWorld);
+  </pre>
+  ----------------------------------------
+  
+  <h2>Currying with Arrow Functions</h2>
+  <p>The same <i>curried_add()</i> function from earlier can be rewritten much more concisely using ES6 arrow function
+    syntax:</p>
+  
+  <pre>let curried_add = a => b => a + b;</pre>
 
+  <p>Let&rsquo;s break that down:</p>
+  <ul>  
+    <li><i>let curried_add</i> is a variable assignment to the outer arrow function, a => ....</li>
+    <li>Calling <i>curried_add</i> takes an argument <i>a</i> and returns <i>b => a + b</i>.</li>
+    <li>Invoking the second arrow function returns the sum, or <i>a + b</i>.</li>
+  </ul>
+  
+  -----------------<br>
+  Code Challenge
+  <p>Rewrite the function <i>changeColor()</i> with arrow expression syntax and assign it to the variable
+    <i>changeColorArrow</i>.</p>
+  
+  <pre>
+    function changeColor(color) {
+    return function(obj) {
+    obj.color = color;
+    }
+    }
+  </pre>
+  
+  <pre>
+    // write your code here
+    let changeColorArrow = color => obj => obj.color = color;
+  </pre>
+  -----------------
+  
+  
+  <h2>Currying in Context</h2>
+  <p>
+    Now that we understand the basics of how currying works, let&rsquo;s look at a use case that&rsquo;s more interesting than
+    addition.<br>
+  
+    For this example, a social sports league company needs a way to filter through an array of players from various
+    cities,
+    sports leagues, and age brackets to generate some graphs about their player data in a dashboard.<br> Each time they
+    generate
+    a list of filtered values, they have to repeat filters that iterate over the entire <i>players</i> array, so they want
+    to
+    modify their code.
+  </p>
+  
+  <pre>
+    const players = [
+    { age: 5, sport: "soccer", city: "Chicago", dateJoined: new Date('2021-01-20') },
+    { age: 6, sport: "baseball", city: "Boulder", dateJoined: new Date('2019-12-30') },
+    { age: 10, sport: "soccer", city: "Chicago", dateJoined: new Date('2020-11-12') },
+    { age: 11, sport: "handball", city: "San Francisco", dateJoined: new Date('2020-08-21') },
+    { age: 6, sport: "soccer", city: "Chicago", dateJoined: new Date('2021-07-06') },
+    { age: 8, sport: "softball", city: "Boulder", dateJoined: new Date('2019-02-27') },
+    { age: 7, sport: "tennis", city: "San Francisco", dateJoined: new Date('2019-05-31') },
+    { age: 4, sport: "handball", city: "San Francisco", dateJoined: new Date('2018-03-10') }
+    ]
+  </pre>
+  
+  <p>
+    Let&rsquo;s say they&rsquo;re interested in seeing all players from the city of San Francisco sorted by age as well as seeing all
+    players in San Francisco who play handball. We can filter over the array of objects to grab the relevant objects, then
+    sort the results or do additional filtering.
+  
+    Below, <i>sortPlayersByValueFromCity()</i> takes three arguments:
+  </p>
+  
+  
   <ul>
     <li>an array of players</li>
     <li>the city to filter by</li>
     <li>a sort key to sort by</li>
   </ul>
-
-<p>The function filters the array of objects by the city key, then sorts by the sort criteria.</p>
-
-const sortPlayersByValueFromCity = (playersArr, city, sortKey) => {
-return playersArr.filter(player => {
-return player.city === city;
-}).sort((a,b) => {
-return a[sortKey] - b[sortKey]
-});
-}
-
-console.log(sortPlayersByValueFromCity(players, "San Francisco", "age"));
-
-<p>Meanwhile, in the following code block, filterPlayersByValueFromCity() takes four arguments:</p>
-
-<ul>
-  <li>an array to filter</li>
-  <li>a city to filter the array by</li>
-  <li>an additional filter key,</li>
-  <li>the matching filter value to search for</li>
-</ul>
-<p>The function filters by the city then filters the results by the key-value pair.</p>
-
-const filterPlayersByValueFromCity = (playersArr, city, filterKey, filterValue) => {
-return playersArr.filter(player => {
-return player.city === city;
-}).filter(playersFromCity => playersFromCity[filterKey] === filterValue)
-}
-
-console.log(filterPlayersByValueFromCity(players, "San Francisco", "sport", "handball"));
-
-<p>There are a couple things you should notice about those functions:</p>
-
-<li>
-  Both functions are filtering by city and performing the same filter each time the function is executed for San
-  Francisco.
-</li>
-<li>Both functions take several arguments.</li>
-<p>
-  Let’s make the code more modular with currying to eliminate potential problems in the code and to avoid repeating the
-  repetitive filter operations.
-</p>
-
-<h2>Identify errors faster</h2>
-
-<p>
-  Say that we call <pre>filterPlayersByValueFromCity()</pre> as <pre>filterPlayersByValueFromCity(players, "San Fran", "sport")</pre>. The
-  returned result is going to be an empty array. There are several things wrong with that function call, but it will still
-  run and it will be unclear why an empty array was returned. The errors include:
-</p>
-
-<li>San Francisco is input as San Fran.</li>
-<li>The fourth argument is missing.</li>
-<p>
-  As we covered earlier in the article, with currying, we can guarantee the final filter will not execute until all
-  arguments have been entered and each nested function has been called. Since you’re handling each argument one off in
-  single argument functions, you can handle validating each argument as you go through the chain and hone in on any
-  argument errors before code proceeds or has a chance to return an empty array.
-</p>
-
-<h2>Make Code Easier to Read and Reuse</h2>
-The code for <pre>sortPlayersByValueFromCity()</pre> and <pre>filterPlayersByValueFromCity()</pre> is hard to read. With currying, we can
-write functions that handle one task, and are therefore not only easier to read and understand, but more reusable. For
-example, we can create a curried function that filters an array of objects by a provided key and value.
-
-const setFilter = array => key => value => array.filter(x => x[key] === value);
-const filterPlayers = setFilter(players);
-const filterPlayersByCity = filterPlayers('city');
-const filteredPlayersBySanFrancisco = filterPlayersByCity('San Francisco');
-const filterPlayersBySport = filterPlayers('sport');
-const filteredPlayersBySoccer = filterPlayersBySport('soccer');
-
-console.log(filteredPlayersBySanFrancisco); // Returns an array of players from San Francisco
-console.log(filteredPlayersBySoccer); // Returns an array of players that play soccer
-
-<h2>Make Code More Modular</h2>
-<p>
-  Now we can reuse the filtered San Francisco object for additional specialized functions. Let’s use it to sort the
-  players by the date they joined the sports league.
-</p>
-
-const sortArrayByValue = sortArray => sortKey => {
-return sortArray.sort(function(a, b){
-if(a[sortKey] < b[sortKey]) { return -1; } if(a[sortKey]> b[sortKey]) { return 1; }
-  return 0;
-  });
-  }
-
-  const sortSanFrancisco = sortArrayByValue(filteredPlayersBySanFrancisco);
-  const sortSFByDateJoined = sortSanFrancisco("dateJoined");
-  console.log(sortSFByDateJoined);
-  <h2>Summary</h2>
+  
+  <p>The function filters the array of objects by the city key, then sorts by the sort criteria.</p>
+  
+  <pre>
+    const sortPlayersByValueFromCity = (playersArr, city, sortKey) => {
+    return playersArr.filter(player => {
+    return player.city === city;
+    }).sort((a,b) => {
+    return a[sortKey] - b[sortKey]
+    });
+    }
+    
+    console.log(sortPlayersByValueFromCity(players, "San Francisco", "age"));
+  </pre>
+  
+  <p>Meanwhile, in the following code block, <i>filterPlayersByValueFromCity()</i> takes four arguments:</p>
+  
+  <ul>
+    <li>an array to filter</li>
+    <li>a city to filter the array by</li>
+    <li>an additional filter key,</li>
+    <li>the matching filter value to search for</li>
+  </ul>
+  <p>The function filters by the city then filters the results by the key-value pair.</p>
+  
+  <pre>
+    const filterPlayersByValueFromCity = (playersArr, city, filterKey, filterValue) => {
+    return playersArr.filter(player => {
+    return player.city === city;
+    }).filter(playersFromCity => playersFromCity[filterKey] === filterValue)
+    }
+    
+    console.log(filterPlayersByValueFromCity(players, "San Francisco", "sport", "handball"));
+  </pre>
+  
+  <p>There are a couple things you should notice about those functions:</p>
+  
+  <li>
+    Both functions are filtering by city and performing the same filter each time the function is executed for San
+    Francisco.
+  </li>
+  <li>Both functions take several arguments.</li>
   <p>
-    In this article, we took a look at how currying works under the hood thanks to closures in JavaScript, and how you can
-    use different syntax techniques to curry your functions. Overall, thanks to the modularity of curried functions, you
-    can now use currying in your code to make your functions have a single purpose and therefore be easier to test, debug,
-    maintain, and read.
+    Let&rsquo;s make the code more modular with currying to eliminate potential problems in the code and to avoid repeating the
+    repetitive filter operations.
   </p>
+  
+  <h2>Identify errors faster</h2>
+  
+  <p>
+    Say that we call <i>filterPlayersByValueFromCity()</i> as <i>filterPlayersByValueFromCity(players, "San Fran",
+      "sport")</i>. The
+    returned result is going to be an empty array. There are several things wrong with that function call, but it will
+    still
+    run and it will be unclear why an empty array was returned. The errors include:
+  </p>
+  
+  <li>San Francisco is input as San Fran.</li>
+  <li>The fourth argument is missing.</li>
+  <p>
+    As we covered earlier in the article, with currying, we can guarantee the final filter will not execute until all
+    arguments have been entered and each nested function has been called. Since you&rsquo;re handling each argument one off in
+    single argument functions, you can handle validating each argument as you go through the chain and hone in on any
+    argument errors before code proceeds or has a chance to return an empty array.
+  </p>
+  
+  <h2>Make Code Easier to Read and Reuse</h2>
+  The code for <i>sortPlayersByValueFromCity()</i> and <i>filterPlayersByValueFromCity()</i> is hard to read. With
+  currying, we can
+  write functions that handle one task, and are therefore not only easier to read and understand, but more reusable. For
+  example, we can create a curried function that filters an array of objects by a provided key and value.
+  
+  <pre>
+    const setFilter = array => key => value => array.filter(x => x[key] === value);
+    const filterPlayers = setFilter(players);
+    const filterPlayersByCity = filterPlayers('city');
+    const filteredPlayersBySanFrancisco = filterPlayersByCity('San Francisco');
+    const filterPlayersBySport = filterPlayers('sport');
+    const filteredPlayersBySoccer = filterPlayersBySport('soccer');
+    
+    console.log(filteredPlayersBySanFrancisco); // Returns an array of players from San Francisco
+    console.log(filteredPlayersBySoccer); // Returns an array of players that play soccer
+  </pre>
+  
+  <h2>Make Code More Modular</h2>
+  <p>
+    Now we can reuse the filtered San Francisco object for additional specialized functions. Let&rsquo;s use it to sort the
+    players by the date they joined the sports league.
+  </p>
+  
+  <pre>
+    const sortArrayByValue = sortArray => sortKey => {
+    return sortArray.sort(function(a, b){
+    if(a[sortKey] < b[sortKey]) { return -1; } if(a[sortKey]> b[sortKey]) { return 1; }
+      return 0;
+      });
+      }
+    
+    const sortSanFrancisco = sortArrayByValue(filteredPlayersBySanFrancisco);
+    const sortSFByDateJoined = sortSanFrancisco("dateJoined");
+    console.log(sortSFByDateJoined);
+  </pre>
+    <h2>Summary</h2>
+    <p>
+      In this article, we took a look at how currying works under the hood thanks to closures in JavaScript, and how you
+      can
+      use different syntax techniques to curry your functions. Overall, thanks to the modularity of curried functions, you
+      can now use currying in your code to make your functions have a single purpose and therefore be easier to test,
+      debug,
+      maintain, and read.
+    </p>
+</div>
