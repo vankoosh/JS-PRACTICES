@@ -1,6 +1,9 @@
-import { animals } from "./animals";
+// HACK insert  HTML
+// HACK for..in loop
+
 import React from "react";
 import ReactDOM from "react-dom";
+import { animals } from "./animals";
 
 const title = "";
 const background = (
