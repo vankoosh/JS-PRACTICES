@@ -69,13 +69,13 @@ const noAwait = async () => {
   console.log(result);
 }
 
-const withAwait = async () => {
+const withAwaitOne = async () => {
   const result = await promiseThree();
   console.log(result);
 }
 
 noAwait();
-withAwait();
+withAwaitOne();
 
 
 // ANOTHER CODECADEMY EXCERCISE
